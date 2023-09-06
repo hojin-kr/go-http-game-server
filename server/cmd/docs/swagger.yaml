@@ -1,0 +1,407 @@
+basePath: /
+definitions:
+  model.Etc:
+    properties:
+      key:
+        type: string
+      user_id:
+        type: integer
+      value:
+        type: string
+    type: object
+  model.Profile:
+    properties:
+      nickname:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.Recovery:
+    properties:
+      code:
+        type: string
+      expired:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  model.RecoveryRequest:
+    properties:
+      code:
+        type: string
+    type: object
+  model.Social:
+    properties:
+      created:
+        type: integer
+      id:
+        type: integer
+      target_id:
+        type: integer
+      type:
+        type: string
+      updated:
+        type: integer
+      user_id:
+        type: integer
+      vars:
+        type: string
+    type: object
+  model.SocialDeleteRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  model.SocialRequest:
+    properties:
+      target_id:
+        type: integer
+      type:
+        type: string
+      user_id:
+        type: integer
+      vars:
+        type: string
+    type: object
+  model.User:
+    properties:
+      created:
+        type: integer
+      id:
+        type: integer
+      status:
+        type: integer
+      updated:
+        type: integer
+      uuid:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: go-http-game-server API
+  title: go-http-game-server API
+  version: 1.0.0
+paths:
+  /api/v1/etc:
+    post:
+      consumes:
+      - application/json
+      description: 사용자의 기타 정보를 업데이트한다.
+      operationId: update-etc-by-user-id
+      parameters:
+      - description: Etc
+        in: body
+        name: etc
+        required: true
+        schema:
+          $ref: '#/definitions/model.Etc'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Etc'
+      summary: Update etc by user_id 사용자의 기타 정보를 업데이트한다
+      tags:
+      - Etc
+  /api/v1/etc/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 사용자의 모든 기타 정보를 조회한다.
+      operationId: get-all-etc-by-user-id
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Etc'
+            type: array
+      summary: Get all etc by user_id 사용자의 모든 기타 정보를 조회한다
+      tags:
+      - Etc
+  /api/v1/etc/{user_id}/{key}:
+    get:
+      consumes:
+      - application/json
+      description: 사용자의 기타 정보를 조회한다.
+      operationId: get-etc-by-user-id-and-key
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        type: integer
+      - description: Key
+        in: path
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Etc'
+      summary: Get etc by user_id and key 사용자의 기타 정보를 조회한다
+      tags:
+      - Etc
+  /api/v1/profile:
+    post:
+      consumes:
+      - application/json
+      description: 사용자의 프로필 닉네임 정보를 업데이트한다. 중복시 에러
+      operationId: update-profile-nicname-by-id
+      parameters:
+      - description: Profile
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/model.Profile'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Profile'
+      summary: Update profile nicname by ID 사용자의 프로필 닉네임 정보를 업데이트한다
+      tags:
+      - Profile
+  /api/v1/profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 사용자의 프로필 정보를 조회한다.
+      operationId: get-profile-by-id
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Profile'
+      summary: Get profile by ID 사용자의 프로필 정보를 조회한다
+      tags:
+      - Profile
+  /api/v1/social:
+    post:
+      consumes:
+      - application/json
+      description: 사용자의 소셜 정보를 추가한다.
+      operationId: insert-social
+      parameters:
+      - description: Social
+        in: body
+        name: social
+        required: true
+        schema:
+          $ref: '#/definitions/model.SocialRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Social'
+      summary: Insert social 사용자의 소셜 정보를 추가한다
+      tags:
+      - Social
+  /api/v1/social/{target_id}/{type}:
+    get:
+      consumes:
+      - application/json
+      description: 타겟의 소셜 정보 카운트를 조회한다.
+      operationId: get-social-count-by-target-id-and-type
+      parameters:
+      - description: Target ID
+        in: path
+        name: target_id
+        type: integer
+      - description: Type
+        in: path
+        name: type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: int
+      summary: Get social count by target_id and type 타겟의 소셜 정보 카운트를 조회한다
+      tags:
+      - Social
+  /api/v1/social/{target_id}/{type}/{limit}/{offset}:
+    get:
+      consumes:
+      - application/json
+      description: 타겟의 소셜 정보를 조회한다.
+      operationId: get-social-by-target-id-and-type
+      parameters:
+      - description: Target ID
+        in: path
+        name: target_id
+        type: integer
+      - description: Type
+        in: path
+        name: type
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Social'
+            type: array
+      summary: Get social by target_id and type 타겟의 소셜 정보를 조회한다
+      tags:
+      - Social
+  /api/v1/social/{user_id}/{type}/{limit}/{offset}:
+    get:
+      consumes:
+      - application/json
+      description: 사용자의 소셜 정보를 조회한다.
+      operationId: get-social-by-user-id-and-type
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        type: integer
+      - description: Type
+        in: path
+        name: type
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Social'
+            type: array
+      summary: Get social by user_id and type 사용자의 소셜 정보를 조회한다
+      tags:
+      - Social
+  /api/v1/social/delete:
+    post:
+      consumes:
+      - application/json
+      description: 소셜 정보를 삭제한다.
+      operationId: delete-social-by-id
+      parameters:
+      - description: Social
+        in: body
+        name: social
+        required: true
+        schema:
+          $ref: '#/definitions/model.SocialDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Social'
+      summary: Delete social by ID 소셜 정보를 삭제한다
+      tags:
+      - Social
+  /api/v1/user/{user_id}/recovery:
+    get:
+      consumes:
+      - application/json
+      description: 사용자의 복구 코드를 조회한다.
+      operationId: get-recovery-code-by-user-id
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Recovery'
+      summary: Get recovery code by user_id 사용자의 복구 코드를 조회한다
+      tags:
+      - User
+  /api/v1/user/{uuid}:
+    get:
+      consumes:
+      - application/json
+      description: 앱부팅시 UUID를 생성하고, UUID를 통해 사용자 정보를 조회한다. (초기화시 매번 호출)
+      operationId: get-user-by-uuid
+      parameters:
+      - description: UUID
+        in: path
+        name: uuid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Get user by UUID 앱부팅시 UUID를 생성하고, UUID를 통해 사용자 정보를 조회한다
+      tags:
+      - User
+  /api/v1/user/recovery:
+    post:
+      consumes:
+      - application/json
+      description: 사용자의 복구 코드를 통해 UUID를 변경한다.
+      operationId: recovery-user
+      parameters:
+      - description: Recovery
+        in: body
+        name: recovery
+        required: true
+        schema:
+          $ref: '#/definitions/model.RecoveryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Recovery user 사용자의 복구 코드를 통해 UUID를 변경한다.
+      tags:
+      - User
+swagger: "2.0"
