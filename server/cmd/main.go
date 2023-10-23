@@ -35,8 +35,9 @@ func main() {
 	// GET GetAccountByUUID
 	v1.Get("/account/:uuid", func(c *fiber.Ctx) error {
 		uuid := c.Params("uuid")
-		user := AccountModel.GetByUUID(uuid)
-		return c.JSON(user)
+		account := AccountModel.GetByUUID(uuid)
+		return c.JSON(account)
 	})
+	// todo: POST Update Account APPLE PLATFORM Token by UUID
 	log.Fatal(app.Listen(":3000"))
 }
